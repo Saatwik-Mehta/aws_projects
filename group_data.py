@@ -1,13 +1,13 @@
 """
 This module will give you the
-list of members of groups in your account
+list of IAM members of groups in your aws account
 """
 from boto3 import client
 
 
 def get_group_members():
     """This function will return the List of dictionaries
-     that contains the group name and members inside
+     that contains the group name and IAM members inside
         a particular aws account.
     :return: List of dictionaries containing the group name and members
     """
