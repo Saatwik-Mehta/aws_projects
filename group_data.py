@@ -2,6 +2,7 @@
 This module will give you the
 list of IAM members of groups in your aws account
 """
+from pprint import pprint
 from boto3 import client
 
 
@@ -20,4 +21,4 @@ def get_group_members():
 
 
 if __name__ == '__main__':
-    print(get_group_members())
+    pprint(get_group_members())
