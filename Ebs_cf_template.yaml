@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: This template will create and mount a ebs volume to the running ec2 instance
+Parameters:
+  EC2InstanceId:
+    Type: 'AWS::EC2::Instance::Id'
+    Description: Ec2 Instance id to attach the ebs with.
+  AvailabilityZone:
+    Type: 'AWS::EC2::AvailabilityZone::Name'
+    Description: Choose the availability zone for your Ec2 Instance
+
+Resources:
+  NewVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      Size: 1
+      AvailabilityZone: !Ref AvailabilityZone
+
+  MountPoint:
+    Type: AWS::EC2::VolumeAttachment
+    Properties:
+      InstanceId: !Ref EC2InstanceId
+      VolumeId: !Ref NewVolume
+      Device: /dev/xvdk
+

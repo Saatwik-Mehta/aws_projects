@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Simple lambda function creation template to test
+Resources:
+  primer:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.9
+      Role: "arn:aws:iam::685751078596:role/FullS3access_lambda"
+      Handler: index.handler
+      Code:
+        ZipFile: |
+          import boto3
+          s3_client = boto3.client('s3')
+          bucket_name = "my-1-sdk-bucket"
+              file_name = "crypto_api_url.json"
+              response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
+              content = response['Body']
+              file_content = content.read().decode("utf-8")
+              print(json.loads(file_content))
+              return {
+                  'statusCode': 200,
+                  'body': json.loads(file_content)
+              }
+
+      Description: Invoke a function during stack creation.
+      TracingConfig:
+        Mode: Active

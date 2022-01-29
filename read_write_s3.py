@@ -1,3 +1,4 @@
+import json
 import logging
 from boto3 import client
 from botocore import exceptions
@@ -38,6 +39,7 @@ try:
             file_name = input("Enter the name of the file to delete:")
             response = s3_client.delete_object(Bucket=bucket_name,
                                                Key=file_name)
+
             print(f"{file_name} Successfully deleted")
             # --------------------- end ---------------------
 

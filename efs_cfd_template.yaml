@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: This template can be used to create efs and attach to ec2 instance
+
+Resources:
+  MountTargetVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 172.31.0.0/16
+
+  MountTargetSubnetOne:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.31.0.0/20
+      VpcId: !Ref MountTargetVPC
+      AvailabilityZone: "ap-south-1b"
+
+  FileSystemResource:
+    Type: 'AWS::EFS::FileSystem'
+    Properties:
+      AvailabilityZoneName: "ap-south-1b"
+      LifecyclePolicies:
+        - TransitionToIA: AFTER_30_DAYS
+      FileSystemTags:
+        - Key: Name
+          Value: TestFileSystemcf
+  MountTargetResource1:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref FileSystemResource
+      SubnetId: !Ref MountTargetSubnetOne
+      SecurityGroups:
+      - !GetAtt MountTargetVPC.DefaultSecurityGroup

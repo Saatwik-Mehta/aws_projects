@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+    AWS CloudFormation Simple template for Ec2 Instance.
+Parameters:
+  KeyName:
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the EC2 instance.
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  AvailabilityZone:
+    Type: 'AWS::EC2::AvailabilityZone::Name'
+    Description: Choose the availability zone for your Ec2 Instance
+  ImageId:
+    Type: 'AWS::EC2::Image::Id'
+    Description: Enter the ImageId for Ec2 Instance
+  ChooseExistingSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup::GroupName'
+    Description: Enter the exisiting Security group for the Ec2 Instance
+
+Resources:
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: 't2.micro'
+      KeyName: !Ref KeyName
+      AvailabilityZone: !Ref AvailabilityZone
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+        - !Ref ChooseExistingSecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            VolumeSize: '8'
+            DeleteOnTermination: 'true'
+        - DeviceName: /dev/xvdf
+          Ebs:
+            VolumeType: gp2
+            VolumeSize: '1'
+            DeleteOnTermination: 'false'
+
+  InstanceSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: An example Security Group using CloudFormation
+      GroupName: CF_instance_sg
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+
+
+
+
+
